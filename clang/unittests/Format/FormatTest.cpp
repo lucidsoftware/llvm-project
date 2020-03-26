@@ -8280,6 +8280,8 @@ TEST_F(FormatTest, LayoutCxx11BraceInitializers) {
   // In combination with BinPackArguments = false.
   FormatStyle NoBinPacking = getLLVMStyle();
   NoBinPacking.BinPackArguments = false;
+  FormatStyle YesBinPacking = getLLVMStyle();
+  YesBinPacking.BinPackArguments = true;
   verifyFormat("const Aaaaaa aaaaa = {aaaaa,\n"
                "                      bbbbb,\n"
                "                      ccccc,\n"
@@ -8312,7 +8314,7 @@ TEST_F(FormatTest, LayoutCxx11BraceInitializers) {
       "    iiiiii, jjjjjj, kkkkkk, aaaaa,  bbbbb,  ccccc,  ddddd, eeeee,\n"
       "    ffffff, ggggg,  hhhhhh, iiiiii, jjjjjj, kkkkkk,\n"
       "};",
-      NoBinPacking);
+      YesBinPacking);
 
   NoBinPacking.AlignAfterOpenBracket = FormatStyle::BAS_AlwaysBreak;
   EXPECT_EQ("static uint8 CddDp83848Reg[] = {\n"
