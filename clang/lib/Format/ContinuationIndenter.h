@@ -202,7 +202,7 @@ struct ParenState {
   ParenState(const FormatToken *Tok, unsigned Indent, unsigned LastSpace,
              bool AvoidBinPacking, bool NoLineBreak)
       : Tok(Tok), Indent(Indent), LastSpace(LastSpace),
-        NestedBlockIndent(Indent), BreakBeforeClosingBrace(false),
+        NestedBlockIndent(Indent), BreakBeforeClosingBrace(false), BreakBeforeClosingParen(false),
         AvoidBinPacking(AvoidBinPacking), BreakBeforeParameter(false),
         NoLineBreak(NoLineBreak), NoLineBreakInOperand(false),
         LastOperatorWrapped(true), ContainsLineBreak(false),
@@ -271,6 +271,13 @@ struct ParenState {
   /// We only want to insert a newline before the closing brace if there also
   /// was a newline after the beginning left brace.
   bool BreakBeforeClosingBrace : 1;
+
+  /// Whether a newline needs to be inserted before the block's closing
+  /// paren.
+  ///
+  /// We only want to insert a newline before the closing paren if there also
+  /// was a newline after the beginning left paren.
+  bool BreakBeforeClosingParen : 1;
 
   /// Avoid bin packing, i.e. multiple parameters/elements on multiple
   /// lines, in this context.
@@ -343,6 +350,8 @@ struct ParenState {
       return FirstLessLess < Other.FirstLessLess;
     if (BreakBeforeClosingBrace != Other.BreakBeforeClosingBrace)
       return BreakBeforeClosingBrace;
+    if (BreakBeforeClosingParen != Other.BreakBeforeClosingParen)
+      return BreakBeforeClosingParen;
     if (QuestionColumn != Other.QuestionColumn)
       return QuestionColumn < Other.QuestionColumn;
     if (AvoidBinPacking != Other.AvoidBinPacking)
